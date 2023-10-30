@@ -3,7 +3,7 @@ import fs from 'fs';
 // Leer productos desde el archivo products.json
 export const getProducts = async () => {
   try {
-    const data = fs.readFileSync('./src/data/products.json', 'utf-8');
+    const data = fs.readFileSync('data/products.json', 'utf-8');
     return JSON.parse(data);
   } catch (error) {
     return [];
@@ -20,10 +20,20 @@ export const getProductById = async (productId) => {
 // Agregar un nuevo producto
 export const addProduct = async (newProduct) => {
   const products = await getProducts();
+  // Verificar si ya existe un producto con el mismo ID
+  const productExists = products.some((product) => product.id === newProduct.id);
+
+  if (productExists) {
+    // Responder con un código de estado 409 Conflict si el producto ya existe
+    throw new Error('Producto con el mismo ID ya existe en la base de datos');
+  }
+
+  // Si no hay conflictos, proceder con la creación del nuevo producto
   newProduct.id = generateProductId(products);
   products.push(newProduct);
   saveProductsToFile(products);
   return newProduct;
+
 }
 
 // Actualizar un producto por ID
@@ -59,5 +69,5 @@ const generateProductId = (products) => {
 // Función para guardar productos en el archivo
 const saveProductsToFile = (products) => {
   const data = JSON.stringify(products, null, 2);
-  fs.writeFileSync('./src/data/products.json', data);
+  fs.writeFileSync('data/products.json', data);
 }

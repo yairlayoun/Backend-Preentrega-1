@@ -3,7 +3,7 @@ import fs from 'fs';
 // Leer carritos desde el archivo carts.json
 export const getCarts = async () => {
   try {
-    const data = fs.readFileSync('./src/data/carts.json', 'utf-8');
+    const data = fs.readFileSync('data/cart.json', 'utf-8');
     return JSON.parse(data);
   } catch (error) {
     return [];
@@ -57,5 +57,5 @@ const generateCartId = (carts) => {
 // Función para guardar carritos en el archivo
 const saveCartsToFile = (carts) => {
   const data = JSON.stringify(carts, null, 2);
-  fs.writeFileSync('./src/data/carts.json', data);
+  fs.writeFileSync('data/cart.json', data);
 }
