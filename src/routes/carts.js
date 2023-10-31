@@ -1,16 +1,16 @@
 import express from 'express';
-import cartManager from '../cartManager.js'; 
+import * as cartsController from '../controllers/cartsController.js';
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
-  const newCart = cartManager.createCart();
+router.post('/', async (req, res) => {
+  const newCart = await cartsController.createCart();
   res.status(201).json({ message: 'Nuevo carrito creado', cartId: newCart.id });
 });
 
-router.get('/:cid', (req, res) => {
+router.get('/:cid', async (req, res) => {
   const cartId = req.params.cid;
-  const cart = cartManager.getCartById(cartId);
+  const cart = await cartsController.getCartById(cartId);
   if (!cart) {
     res.status(404).json({ error: 'Carrito no encontrado' });
   } else {
