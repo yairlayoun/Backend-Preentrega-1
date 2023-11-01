@@ -4,7 +4,8 @@ import fs from 'fs';
 export const getCarts = async () => {
   try {
     const data = fs.readFileSync('data/cart.json', 'utf-8');
-    return JSON.parse(data);
+    const carts = JSON.parse(data);
+    return carts;
   } catch (error) {
     return [];
   }
@@ -13,7 +14,7 @@ export const getCarts = async () => {
 // Obtener un carrito por ID
 export const getCartById = async (cartId) => {
   const carts = await getCarts();
-  const cart = carts.find((cart) => cart.id === cartId);
+  const cart = carts.find((cart) => cart.id == cartId);
   return cart;
 }
 
@@ -32,12 +33,12 @@ export const createCart = async () => {
 // Agregar un producto a un carrito
 export const addProductToCart = async (cartId, productId, quantity) => {
   const carts = await getCarts();
-  const cart = carts.find((cart) => cart.id === cartId);
+  const cart = carts.find((cart) => cart.id == cartId);
   if (!cart) {
     return false;
   }
 
-  const existingProduct = cart.products.find((item) => item.productId === productId);
+  const existingProduct = cart.products.find((item) => item.productId == productId);
   if (existingProduct) {
     existingProduct.quantity += quantity;
   } else {
